@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StackExchange API</title>
+</head>
+<style>
+    #maintable {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #maintable td,
+    #maintable th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #maintable tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #maintable tr:hover {
+        background-color: #ddd;
+    }
+
+    #maintable th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #007953;
+        color: white;
+    }
+</style>
+
+<body>
+    {% if not cdata %}
+    <p>Search Limit exceeded</p>
+    {% else %}
+    <table id="maintable">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+        </tr>
+        {% for i in cdata%}
+        <tr>
+            <td>{{i.question_id}}</td>
+            <td>{{i.title}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if cdata %}
+    {% if cdata.has_previous %}
+    <a href="?pg_page=1">&laquo;First</a>
+    <a href="?pg_page={{cdata.previous_page_number}}">Previous</a>
+    {% endif %}
+
+    Page {{cdata.number}} of {{cdata.paginator.num_pages}}
+
+    {% if cdata.has_next %}
+    <a href="?pg_page={{cdata.next_page_number}}">Next</a>
+    <a href="?pg_page={{cdata.paginator.num_pages}}">&raquo;Last</a>
+    {% endif %}
+    {% endif %}
+</body>
+
+</html>
