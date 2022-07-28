@@ -27,23 +27,23 @@ class QuestionsView(TemplateView):
 	def get_context_data(self, **kwargs):
 		curr_ip = get_client_ip(self.request)
 		context = super(QuestionsView, self).get_context_data(**kwargs)
-		if cache.get("search_limit_day"):
-			total_search_day = cache.get("search_limit_day")
+		if cache.get(f"search_limit_day{curr_ip}"):
+			total_search_day = cache.get(f"search_limit_day{curr_ip}")
 			if total_search_day > 100:
 				context['cdata'] = {}
 				return context
 			else:
-				if cache.get("search_limit_min"):
-					total_search = cache.get("search_limit_min")
+				if cache.get(f"search_limit_min{curr_ip}"):
+					total_search = cache.get(f"search_limit_min{curr_ip}")
 					if total_search > 5:
 						context['cdata'] = {}
 						return context
 					else:
-						cache.set("search_limit_min", total_search + 1, 5*60)
+						cache.set(f"search_limit_min{curr_ip}", total_search + 1, 5*60)
 				else:
-					cache.set("search_limit_min", 1, 5*60)
+					cache.set(f"search_limit_min{curr_ip}", 1, 5*60)
 		else:
-			cache.set("search_limit_day", 1, 86400)
+			cache.set(f"search_limit_day{curr_ip}", 1, 86400)
         
 		page = self.request.GET.get("page")
 		pg_page = self.request.GET.get("pg_page")
